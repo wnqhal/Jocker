@@ -51,6 +51,7 @@ const Label = styled.label`
   display: flex;
   align-items: center;
   gap: 5px;
+  width: fit-content;
   cursor: pointer;
 `;
 
