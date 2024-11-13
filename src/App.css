@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+
+.fade-box {
+  font-size: 40px;
+  opacity: 0;
+}
+
+.fade-box.shake {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+  animation: shake 1s ease-in-out;
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
