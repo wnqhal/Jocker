@@ -1,11 +1,5 @@
-import LanSelect from "../components/LanSelect";
-
 const Joke = () => {
-  return (
-    <div>
-      <LanSelect />
-    </div>
-  );
+  return <div>Joke</div>;
 };
 
 export default Joke;
