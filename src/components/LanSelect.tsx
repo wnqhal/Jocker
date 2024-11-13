@@ -28,7 +28,7 @@ const LanSelect = () => {
   useEffect(() => {
     const handleClickOutSide = (e: MouseEvent) => {
       if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
-        setIsOpen(!isOpen);
+        setIsOpen(false);
       }
     };
     window.addEventListener("mousedown", handleClickOutSide);
@@ -36,29 +36,23 @@ const LanSelect = () => {
   }, [selectRef]);
 
   return (
-    <SelectWrap ref={selectRef}>
-      <SelectBox isOpen={isOpen}>
-        <Selected onClick={handleClick}>
-          <p>{selected}</p>
-          <img src={arrow} alt="arrow" />
-        </Selected>
-        <ul>
-          {language.map((v) => (
-            <li key={v.value}>
-              <Option onClick={() => handleSelect(v.value, v.country)}>
-                {v.value} - {v.country}
-              </Option>
-            </li>
-          ))}
-        </ul>
-      </SelectBox>
-    </SelectWrap>
+    <SelectBox ref={selectRef} isOpen={isOpen}>
+      <Selected onClick={handleClick}>
+        <p>{selected}</p>
+        <img src={arrow} alt="arrow" />
+      </Selected>
+      <ul>
+        {language.map((v) => (
+          <li key={v.value}>
+            <Option onClick={() => handleSelect(v.value, v.country)}>
+              {v.value} - {v.country}
+            </Option>
+          </li>
+        ))}
+      </ul>
+    </SelectBox>
   );
 };
-
-const SelectWrap = styled.div`
-  width: 200px;
-`;
 
 const SelectBox = styled.div<{ isOpen: boolean }>`
   display: inline-block;
