@@ -21,6 +21,22 @@ p {
   font-weight: normal;
 }
 
+a {
+  color: inherit;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+button {
+  font-size: inherit;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -28,5 +44,5 @@ code {
 
 @font-face {
   font-family: NotoSans;
-  src: url("./asset/fonts/NotoSansKR-Medium.ttf");
+  src: url("./asset/fonts/NotoSansKR-Regular.ttf");
 }
