@@ -1,5 +1,7 @@
+import Header from "../components/Header";
+
 const Joke = () => {
-  return <div>Joke</div>;
+  return <Header />;
 };
 
 export default Joke;

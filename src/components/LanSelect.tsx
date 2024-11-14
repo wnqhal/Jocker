@@ -57,18 +57,27 @@ const LanSelect = () => {
 const SelectBox = styled.div<{ isOpen: boolean }>`
   display: inline-block;
   width: 200px;
-  border: 1px solid #fff;
-  border-radius: 5px;
+  ${({ isOpen }) =>
+    isOpen
+      ? "border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff; border-bottom: none"
+      : "border: 1px solid #fff"};
+  ${({ isOpen }) =>
+    isOpen ? "border-radius: 5px 5px 0 0" : "border-radius: 5px;"};
   background-color: #434954;
   font-size: 15px;
   cursor: pointer;
 
   & > ul {
     display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+    ${({ isOpen }) =>
+      isOpen
+        ? "border-left: 1px solid #fff; border-right: 1px solid #fff; border-bottom: 1px solid #fff;"
+        : ""};
+    position: absolute;
     width: 200px;
     border-radius: 0 0 5px 5px;
     background: #282c34;
-    margin: 0;
+    margin: 0 0 0 -1px;
   }
 
   & img {

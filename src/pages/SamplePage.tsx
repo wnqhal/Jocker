@@ -1,5 +1,5 @@
 import LanSelect from "../components/LanSelect";
-import RadioGroup, { Radio } from "../components/Radio";
+import RadioGroup, { EGroupType } from "../components/RadioCheckbox";
 
 const SamplePage = () => {
   return (
@@ -12,8 +12,32 @@ const SamplePage = () => {
       }}
     >
       <LanSelect />
-      <Radio value="Any" name="name" />
-      <RadioGroup value={["Any", "Custom"]} name="group1" />
+      <RadioGroup
+        type={EGroupType.RADIO}
+        value={["Any", "Custom"]}
+        name="group1"
+        onRadioSelected={() => {}}
+      />
+      <RadioGroup
+        type={EGroupType.CHECKBOX}
+        value={["Hello", "HIII"]}
+        name="group1"
+        onRadioSelected={() => {}}
+      />
+      <RadioGroup
+        type={EGroupType.RADIO}
+        value={["Any", "Custom"]}
+        name="group1"
+        onRadioSelected={() => {}}
+        disabled
+      />
+      <RadioGroup
+        type={EGroupType.CHECKBOX}
+        value={["Hello", "HIII"]}
+        name="group1"
+        onRadioSelected={() => {}}
+        disabled
+      />
     </div>
   );
 };
