@@ -6,7 +6,9 @@ interface RadioCheckboxGroupProps {
   name: string;
   type: EGroupType;
   disabled?: boolean;
-  onRadioSelected: (selectedValue: string) => void;
+  onRadioSelected?: (selectedValue: string) => void;
+  onCategorySelected?: (selectedValue: string[]) => void;
+  onBlackListSelected?: (selectedValue: string[]) => void;
 }
 
 export enum EGroupType {
@@ -20,13 +22,15 @@ export const RadioCheckboxGroup = ({
   type,
   disabled = false,
   onRadioSelected,
+  onCategorySelected,
+  onBlackListSelected,
 }: RadioCheckboxGroupProps) => {
   const [radioSelected, setRadioSelected] = useState<string>(value[0]);
   const [checkboxSelected, setCheckboxSelected] = useState<string[]>([]);
 
   const handleRadioSelect = (v: string) => {
     setRadioSelected(v);
-    onRadioSelected(v);
+    onRadioSelected?.(v);
   };
 
   const handleCheckboxSelect = (v: string) => {
@@ -34,6 +38,15 @@ export const RadioCheckboxGroup = ({
       prev.includes(v) ? prev.filter((item) => item !== v) : [...prev, v]
     );
   };
+
+  useEffect(() => {
+    if (onCategorySelected) {
+      onCategorySelected(checkboxSelected);
+    }
+    if (onBlackListSelected) {
+      onBlackListSelected(checkboxSelected);
+    }
+  }, [checkboxSelected, onCategorySelected, onBlackListSelected]);
 
   return (
     <GroupWrapper>

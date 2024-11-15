@@ -1,8 +1,13 @@
 import styled from "styled-components";
 import arrow from "../asset/imgs/select_icon.svg";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import useOutsideClick from "../hooks/useOutsideClick";
 
-const LanSelect = () => {
+interface LangSelectProps {
+  onLanguageSelected: (selectedValue: string) => void;
+}
+
+const LanSelect = ({ onLanguageSelected }: LangSelectProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>("en - English");
   const selectRef = useRef<HTMLDivElement>(null);
@@ -22,18 +27,10 @@ const LanSelect = () => {
 
   const handleSelect = (value: string, country: string) => {
     setSelected(`${value} - ${country}`);
+    onLanguageSelected(value);
     setIsOpen(false);
   };
-
-  useEffect(() => {
-    const handleClickOutSide = (e: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    window.addEventListener("mousedown", handleClickOutSide);
-    return () => window.removeEventListener("mousedown", handleClickOutSide);
-  }, [selectRef]);
+  useOutsideClick(selectRef, () => setIsOpen(false));
 
   return (
     <SelectBox ref={selectRef} isOpen={isOpen}>
