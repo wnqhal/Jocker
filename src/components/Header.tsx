@@ -1,12 +1,16 @@
 import styled from "styled-components";
 import LanSelect from "./LanSelect";
 import setting from "../asset/imgs/setting.svg";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import RadioCheckboxGroup, { EGroupType } from "./RadioCheckbox";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const Header = () => {
   const [openSetting, setOpenSetting] = useState<boolean>(false);
+  const [languageSelected, setLanguageSelected] = useState<string>("en");
   const [radioSelected, setRadioSelected] = useState<string>("Any");
+  const [categorySelected, setCategorySelected] = useState<string[]>([]);
+  const [blackListSelected, setBlackListSelected] = useState<string[]>([]);
   const settingRef = useRef<HTMLDivElement>(null);
 
   const category = [
@@ -18,60 +22,84 @@ const Header = () => {
     "Christmas",
   ];
 
+  const blackList = [
+    "nsfw",
+    "religious",
+    "political",
+    "racist",
+    "sexist",
+    "explicit",
+  ];
+
   const handleClick = () => {
     setOpenSetting(!openSetting);
   };
 
-  const handleRadioSelectedChange = (newSelectedValue: string) => {
-    setRadioSelected(newSelectedValue);
-    console.log(newSelectedValue);
+  const handleLanguageSelectedChange = (newSelectedValue: string) => {
+    setLanguageSelected(newSelectedValue);
   };
 
-  useEffect(() => {
-    const handleClickOutSide = (e: MouseEvent) => {
-      if (
-        settingRef.current &&
-        !settingRef.current.contains(e.target as Node)
-      ) {
-        setOpenSetting(false);
-      }
-    };
-    window.addEventListener("mousedown", handleClickOutSide);
-    return () => window.removeEventListener("mousedown", handleClickOutSide);
-  }, [settingRef]);
+  const handleRadioSelectedChange = (newSelectedValue: string) => {
+    setRadioSelected(newSelectedValue);
+  };
+
+  const handleCategorySelectedChange = (newSelectedValue: string[]) => {
+    setCategorySelected(newSelectedValue);
+  };
+
+  const handleBlackListSelectedChange = (newSelectedValue: string[]) => {
+    setBlackListSelected(newSelectedValue);
+  };
+
+  const handleRefreshClick = () => {
+    window.location.reload();
+  };
+
+  useOutsideClick(settingRef, () => setOpenSetting(false));
 
   return (
     <HeaderWrapper>
-      <Logo>JOCKER</Logo>
+      <Logo onClick={handleRefreshClick}>JOCKER</Logo>
       <RightContent>
-        <LanSelect />
-        <Setting onClick={handleClick}>
-          <img src={setting} alt="setting" />
-        </Setting>
+        <LanSelect onLanguageSelected={handleLanguageSelectedChange} />
+        <SettingContainer ref={settingRef}>
+          <Setting onClick={handleClick}>
+            <img src={setting} alt="setting" />
+          </Setting>
+          {openSetting && (
+            <SettingWrap>
+              <SettingContent>
+                <SettingTitle>Categories</SettingTitle>
+                <RadioCheckboxGroup
+                  type={EGroupType.RADIO}
+                  value={["Any", "Custom"]}
+                  name="category1"
+                  onRadioSelected={handleRadioSelectedChange}
+                />
+                <RadioCheckboxGroup
+                  disabled={radioSelected === "Any"}
+                  type={EGroupType.CHECKBOX}
+                  value={category}
+                  name="category2"
+                  onCategorySelected={handleCategorySelectedChange}
+                />
+              </SettingContent>
+              <SettingContent>
+                <SettingTitle>BlackList</SettingTitle>
+                <RadioCheckboxGroup
+                  type={EGroupType.CHECKBOX}
+                  value={blackList}
+                  name="blackList1"
+                  onBlackListSelected={handleBlackListSelectedChange}
+                />
+              </SettingContent>
+              <BtnWrap>
+                <SaveBtn>save</SaveBtn>
+              </BtnWrap>
+            </SettingWrap>
+          )}
+        </SettingContainer>
       </RightContent>
-      {openSetting && (
-        <SettingWrap ref={settingRef}>
-          <SettingContent>
-            <SettingTitle>Categories</SettingTitle>
-            <RadioCheckboxGroup
-              type={EGroupType.RADIO}
-              value={["Any", "Custom"]}
-              name="radio1"
-              onRadioSelected={handleRadioSelectedChange}
-            />
-            <RadioCheckboxGroup
-              disabled={radioSelected === "Any"}
-              type={EGroupType.CHECKBOX}
-              value={category}
-              name="checkbox1"
-              onRadioSelected={() => {}}
-            />
-          </SettingContent>
-          <SettingContent>
-            <SettingTitle>BlackList</SettingTitle>
-          </SettingContent>
-        </SettingWrap>
-      )}
     </HeaderWrapper>
   );
 };
@@ -83,10 +111,14 @@ const HeaderWrapper = styled.div`
   height: 70px;
   padding: 0 30px 0 20px;
   background-color: black;
+  border-bottom: 1px solid white;
 `;
 
-const Logo = styled.h1`
+const Logo = styled.button`
+  color: inherit;
+  padding: 0;
   font-size: 30px;
+  cursor: pointer;
 `;
 
 const RightContent = styled.div`
@@ -95,9 +127,14 @@ const RightContent = styled.div`
   gap: 30px;
 `;
 
+const SettingContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const Setting = styled.button`
   padding: 0;
-  height: fit-content;
+  height: 35px;
 `;
 
 const SettingWrap = styled.div`
@@ -114,13 +151,38 @@ const SettingContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  &:last-child {
-    margin-top: 22px;
+  &:first-child {
+    margin-bottom: 22px;
   }
 `;
+
 const SettingTitle = styled.p`
   font-size: 20px;
   font-weight: 600;
+`;
+
+const BtnWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 25px 0 0 0;
+`;
+
+const SaveBtn = styled.button`
+  color: inherit;
+  background-color: #7825c5;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 3px 15px 7px 15px;
+  width: 150px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #44156f;
+  }
+
+  &:active {
+    background-color: #af7ddd;
+  }
 `;
 
 export default Header;
