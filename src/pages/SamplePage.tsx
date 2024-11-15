@@ -11,7 +11,7 @@ const SamplePage = () => {
         gap: 50,
       }}
     >
-      <LanSelect />
+      <LanSelect onLanguageSelected={() => {}} />
       <RadioGroup
         type={EGroupType.RADIO}
         value={["Any", "Custom"]}
