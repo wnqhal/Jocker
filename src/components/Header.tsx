@@ -5,7 +5,19 @@ import { useRef, useState } from "react";
 import RadioCheckboxGroup, { EGroupType } from "./RadioCheckbox";
 import useOutsideClick from "../hooks/useOutsideClick";
 
-const Header = () => {
+interface HeaderProps {
+  onLanguageSelected: (selectedValue: string) => void;
+  onRadioSelected: (selectedValue: string) => void;
+  onCategorySelected: (selectedValue: string[]) => void;
+  onBlackListSelected: (selectedValue: string[]) => void;
+}
+
+const Header = ({
+  onLanguageSelected,
+  onRadioSelected,
+  onCategorySelected,
+  onBlackListSelected,
+}: HeaderProps) => {
   const [openSetting, setOpenSetting] = useState<boolean>(false);
   const [languageSelected, setLanguageSelected] = useState<string>("en");
   const [radioSelected, setRadioSelected] = useState<string>("Any");
@@ -37,18 +49,22 @@ const Header = () => {
 
   const handleLanguageSelectedChange = (newSelectedValue: string) => {
     setLanguageSelected(newSelectedValue);
+    onLanguageSelected(newSelectedValue);
   };
 
   const handleRadioSelectedChange = (newSelectedValue: string) => {
     setRadioSelected(newSelectedValue);
+    onRadioSelected(newSelectedValue);
   };
 
   const handleCategorySelectedChange = (newSelectedValue: string[]) => {
     setCategorySelected(newSelectedValue);
+    onCategorySelected(newSelectedValue);
   };
 
   const handleBlackListSelectedChange = (newSelectedValue: string[]) => {
     setBlackListSelected(newSelectedValue);
+    onBlackListSelected(newSelectedValue);
   };
 
   const handleRefreshClick = () => {
@@ -93,9 +109,9 @@ const Header = () => {
                   onBlackListSelected={handleBlackListSelectedChange}
                 />
               </SettingContent>
-              <BtnWrap>
-                <SaveBtn>save</SaveBtn>
-              </BtnWrap>
+              {/* <BtnWrap>
+                <SaveBtn onClick={() =>}>save</SaveBtn>
+              </BtnWrap> */}
             </SettingWrap>
           )}
         </SettingContainer>
@@ -141,6 +157,7 @@ const SettingWrap = styled.div`
   position: absolute;
   width: 585px;
   border: 1px solid #fff;
+  background-color: #282c34;
   border-radius: 10px;
   right: 30px;
   top: 70px;

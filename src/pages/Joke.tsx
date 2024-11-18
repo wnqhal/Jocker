@@ -9,34 +9,62 @@ const Joke = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [language, setLanguage] = useState<string>("en");
+  const [radioSelected, setRadioSelected] = useState<string>("Any");
+  const [category, setCategory] = useState<string[]>([]);
+  const [blackList, setBlackList] = useState<string[]>([]);
+
+  const handleLanguageSelectedChange = (newSelectedValue: string) => {
+    setLanguage(newSelectedValue);
+  };
+
+  const handleRadioSelectedChange = (newSelectedValue: string) => {
+    setRadioSelected(newSelectedValue);
+  };
+
+  const handleCategorySelectedChange = (newSelectedValue: string[]) => {
+    setCategory(newSelectedValue);
+  };
+
+  const handleBlackListSelectedChange = (newSelectedValue: string[]) => {
+    setBlackList(newSelectedValue);
+  };
 
   const fetchJoke = async () => {
-    setLoading(true); // 로딩 상태 설정
-    setError(null); // 에러 초기화
+    setLoading(true);
+    setError(null);
 
     try {
+      const blacklistFlags =
+        blackList.length > 0 ? `blacklistFlags=${blackList.join(",")}&` : "";
+
       const response = await axios.get(
-        "https://v2.jokeapi.dev/joke/Any?type=single"
+        `https://v2.jokeapi.dev/joke/${
+          radioSelected === "Custom" ? category : "Any"
+        }?${`lang=${language}&`}${blacklistFlags}type=single`
       );
       if (response.data.error) {
         throw new Error("No joke found.");
       }
-      // 농담을 상태에 저장
       setJoke(response.data.joke);
     } catch (error: any) {
-      setError("Failed to fetch joke: " + error.message); // 에러 처리
+      setError("Failed to fetch joke: " + error.message);
     } finally {
-      setLoading(false); // 로딩 끝
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchJoke();
-  }, []);
+  }, [language]);
 
   return (
     <Wrapper>
-      <Header />
+      <Header
+        onLanguageSelected={handleLanguageSelectedChange}
+        onRadioSelected={handleRadioSelectedChange}
+        onCategorySelected={handleCategorySelectedChange}
+        onBlackListSelected={handleBlackListSelectedChange}
+      />
       <Content>
         <JokeText>
           {loading ? (
