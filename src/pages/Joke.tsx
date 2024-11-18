@@ -43,11 +43,23 @@ const Joke = () => {
         }?${`lang=${language}&`}${blacklistFlags}type=single`
       );
       if (response.data.error) {
-        throw new Error("No joke found.");
+        const errorMessage = response.data.causedBy
+          ? response.data.causedBy.join(", ")
+          : "Unknown error";
+        throw new Error(errorMessage);
       }
       setJoke(response.data.joke);
     } catch (error: any) {
-      setError("Failed to fetch joke: " + error.message);
+      if (error.response) {
+        const errorMessage =
+          error.response.data.message.causedBy ||
+          error.response.data.causedBy?.join(", ") ||
+          "Unknown error occurred";
+        setError(`${errorMessage}Please use it in a different setting
+`);
+      } else {
+        setError(`Failed to fetch joke: ${error.message}`);
+      }
     } finally {
       setLoading(false);
     }
