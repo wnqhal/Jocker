@@ -1,8 +1,13 @@
 import styled from "styled-components";
 import arrow from "../asset/imgs/select_icon.svg";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import useOutsideClick from "../hooks/useOutsideClick";
 
-const LanSelect = () => {
+interface LangSelectProps {
+  onLanguageSelected: (selectedValue: string) => void;
+}
+
+const LanSelect = ({ onLanguageSelected }: LangSelectProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>("en - English");
   const selectRef = useRef<HTMLDivElement>(null);
@@ -22,18 +27,10 @@ const LanSelect = () => {
 
   const handleSelect = (value: string, country: string) => {
     setSelected(`${value} - ${country}`);
+    onLanguageSelected(value);
     setIsOpen(false);
   };
-
-  useEffect(() => {
-    const handleClickOutSide = (e: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    window.addEventListener("mousedown", handleClickOutSide);
-    return () => window.removeEventListener("mousedown", handleClickOutSide);
-  }, [selectRef]);
+  useOutsideClick(selectRef, () => setIsOpen(false));
 
   return (
     <SelectBox ref={selectRef} isOpen={isOpen}>
@@ -57,18 +54,27 @@ const LanSelect = () => {
 const SelectBox = styled.div<{ isOpen: boolean }>`
   display: inline-block;
   width: 200px;
-  border: 1px solid #fff;
-  border-radius: 5px;
+  ${({ isOpen }) =>
+    isOpen
+      ? "border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff; border-bottom: none"
+      : "border: 1px solid #fff"};
+  ${({ isOpen }) =>
+    isOpen ? "border-radius: 5px 5px 0 0" : "border-radius: 5px;"};
   background-color: #434954;
   font-size: 15px;
   cursor: pointer;
 
   & > ul {
     display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+    ${({ isOpen }) =>
+      isOpen
+        ? "border-left: 1px solid #fff; border-right: 1px solid #fff; border-bottom: 1px solid #fff;"
+        : ""};
+    position: absolute;
     width: 200px;
     border-radius: 0 0 5px 5px;
     background: #282c34;
-    margin: 0;
+    margin: 0 0 0 -1px;
   }
 
   & img {
