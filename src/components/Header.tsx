@@ -109,9 +109,6 @@ const Header = ({
                   onBlackListSelected={handleBlackListSelectedChange}
                 />
               </SettingContent>
-              {/* <BtnWrap>
-                <SaveBtn onClick={() =>}>save</SaveBtn>
-              </BtnWrap> */}
             </SettingWrap>
           )}
         </SettingContainer>
@@ -176,30 +173,6 @@ const SettingContent = styled.div`
 const SettingTitle = styled.p`
   font-size: 20px;
   font-weight: 600;
-`;
-
-const BtnWrap = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 25px 0 0 0;
-`;
-
-const SaveBtn = styled.button`
-  color: inherit;
-  background-color: #7825c5;
-  border: 1px solid white;
-  border-radius: 5px;
-  padding: 3px 15px 7px 15px;
-  width: 150px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #44156f;
-  }
-
-  &:active {
-    background-color: #af7ddd;
-  }
 `;
 
 export default Header;
