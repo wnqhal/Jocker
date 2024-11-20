@@ -109,9 +109,6 @@ const Header = ({
                   onBlackListSelected={handleBlackListSelectedChange}
                 />
               </SettingContent>
-              {/* <BtnWrap>
-                <SaveBtn onClick={() =>}>save</SaveBtn>
-              </BtnWrap> */}
             </SettingWrap>
           )}
         </SettingContainer>
